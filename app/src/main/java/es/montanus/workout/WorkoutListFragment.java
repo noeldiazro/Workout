@@ -1,6 +1,6 @@
 package es.montanus.workout;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -10,6 +10,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class WorkoutListFragment extends ListFragment {
+    interface Listener {
+        void itemClicked(long id);
+    }
+
+    private Listener listener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ArrayAdapter<Workout> adapter = new ArrayAdapter<>(
@@ -22,9 +28,14 @@ public class WorkoutListFragment extends ListFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        this.listener = (Listener)context;
+    }
+
+    @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent intent = new Intent(getActivity(), DetailActivity.class);
-        intent.putExtra(DetailActivity.ID, id);
-        startActivity(intent);
+        if (listener != null)
+            this.listener.itemClicked(id);
     }
 }
