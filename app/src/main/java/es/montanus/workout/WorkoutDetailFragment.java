@@ -2,12 +2,21 @@ package es.montanus.workout;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.*;
 import android.widget.TextView;
 
 public class WorkoutDetailFragment extends Fragment {
+    private static final String WORKOUT_ID = "workoutId";
     private long workoutId;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null)
+            setWorkoutId(savedInstanceState.getLong(WORKOUT_ID));
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -25,6 +34,11 @@ public class WorkoutDetailFragment extends Fragment {
             TextView description = view.findViewById(R.id.textDescription);
             description.setText(workout.getDescription());
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        outState.putLong(WORKOUT_ID, workoutId);
     }
 
     public void setWorkoutId(long id) {
